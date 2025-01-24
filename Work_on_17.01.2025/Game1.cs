@@ -1,14 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
-namespace Work_on_17._01._2025
+using Work_on_17.Classes;
+namespace Work_on_17
 {
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-
+        //Поля  
+        private Player _player;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -19,7 +20,7 @@ namespace Work_on_17._01._2025
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            _player = new Player();
             base.Initialize();
         }
 
@@ -27,6 +28,7 @@ namespace Work_on_17._01._2025
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            _player.LoadContent(Content);
             // TODO: use this.Content to load your game content here
         }
 
@@ -36,7 +38,7 @@ namespace Work_on_17._01._2025
                 Exit();
 
             // TODO: Add your update logic here
-
+            _player.Update();
             base.Update(gameTime);
         }
 
@@ -45,7 +47,9 @@ namespace Work_on_17._01._2025
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-
+            _spriteBatch.Begin();
+            _player.Draw(_spriteBatch);
+            _spriteBatch.End();
             base.Draw(gameTime);
         }
     }
