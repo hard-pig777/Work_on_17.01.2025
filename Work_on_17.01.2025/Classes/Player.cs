@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Content;
+using System.Threading;
 
 namespace Work_on_17.Classes
 {
@@ -14,37 +15,89 @@ namespace Work_on_17.Classes
     {
         private Vector2 _position;
         private Texture2D _texture;
+        private float _speed;
+        //weapon
+        private List <Bullet> _bulletList = new List <Bullet>();
+        //timer
+        private int _timer = 1;
+        private int _maxTime = 10;
         public Player()
         {
             _position = new Vector2(30,30);
             _texture = null;
+            _speed = 9;
+            
         }
         public void LoadContent(ContentManager content)
         {
             _texture = content.Load<Texture2D>("player");
         }
-        public void Update()
+        public void Update(int widthSc, int heightSc, ContentManager content)
+            
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.S))
+            KeyboardState keyboard = Keyboard.GetState();
+            #region Moevment
+            if (keyboard.IsKeyDown(Keys.S))
             {
-                _position.Y += 5;
+                _position.Y += _speed;
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.W))
+            if (keyboard.IsKeyDown(Keys.W))
             {
-                _position.Y -= 5;
+                _position.Y -= _speed;
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.A))
+            if (keyboard.IsKeyDown(Keys.A))
             {
-                _position.Y -= 5;
+                _position.X -= _speed;
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.D))
+            if (keyboard.IsKeyDown(Keys.D))
             {
-                _position.Y += 5;
+                _position.X += _speed;
             }
+            if (keyboard.IsKeyDown(Keys.Space) && _timer >= _maxTime)
+            {
+                Bullet bullet = new Bullet();
+                bullet.Position =new Vector2(_position.X + _texture.Width /2 - bullet.Width / 2, _position.Y - bullet.Height/2);
+                bullet .LoadContent(content);
+                _bulletList.Add(bullet);
+                _timer = 0;            }
+            foreach (Bullet bullet in _bulletList)
+            {
+                bullet.Update(); 
+
+            }
+            if(_timer <= _maxTime)
+            {
+                _timer++;
+            }
+            #endregion
+
+            #region Bounds
+            if(_position.X < 0)
+            {
+                _position.X = 0;
+            }
+            if (_position.X > widthSc - _texture.Width)
+            {
+                _position.X = widthSc - _texture.Width;
+            }
+            if (_position.Y < 0)
+            {
+                _position.Y = 0;
+            }
+            if (_position.Y > heightSc - _texture.Height)
+            {
+                _position.Y = heightSc - _texture.Height;
+            }
+            
+            #endregion
         }
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_texture, _position, Color.White);
+            foreach (Bullet bullet in _bulletList)
+            {
+                bullet.Draw(spriteBatch);
+            }
         }
     }
 }
