@@ -16,8 +16,19 @@ namespace Work_on_17.Classes
         private Vector2 _position;
         private Texture2D _texture;
         private float _speed;
-        //weapon
+        private Rectangle _collision;
         private List <Bullet> _bulletList = new List <Bullet>();
+        public List<Bullet> Bullets
+        {
+            get { return _bulletList; }
+        }
+        public Rectangle Collision
+        {
+            get { return _collision; }
+        }
+       
+        //weapon
+        
         //timer
         private int _timer = 1;
         private int _maxTime = 10;
@@ -26,8 +37,9 @@ namespace Work_on_17.Classes
             _position = new Vector2(30,30);
             _texture = null;
             _speed = 9;
-            
+            _collision = new Rectangle((int)_position.X, (int)_position.Y, 0, 0);
         }
+        
         public void LoadContent(ContentManager content)
         {
             _texture = content.Load<Texture2D>("player");
@@ -59,20 +71,34 @@ namespace Work_on_17.Classes
                 bullet.Position =new Vector2(_position.X + _texture.Width /2 - bullet.Width / 2, _position.Y - bullet.Height/2);
                 bullet .LoadContent(content);
                 _bulletList.Add(bullet);
-                _timer = 0;            }
+                _timer = 0;            
+            }
             foreach (Bullet bullet in _bulletList)
             {
                 bullet.Update(); 
 
+            }
+            for(int i = 0; i <_bulletList.Count(); i++)
+            {
+                if (_bulletList[i].IsAlive == false)
+                {
+                    _bulletList.RemoveAt(i);
+                    i--;
+                }
             }
             if(_timer <= _maxTime)
             {
                 _timer++;
             }
             #endregion
-
+            _collision = new Rectangle(
+                (int)_position.X,
+                (int)_position.Y,
+                _texture.Width,
+                _texture.Height
+            );
             #region Bounds
-            if(_position.X < 0)
+            if (_position.X < 0)
             {
                 _position.X = 0;
             }

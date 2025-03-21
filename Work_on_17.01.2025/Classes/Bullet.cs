@@ -10,12 +10,13 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Work_on_17.Classes
 {
-    internal class Bullet
+    public class Bullet
     {
         private Texture2D _texture;
         private int _width = 20;
         private int _height= 20;
         private int _speed = 3;
+        private bool _isAlive;
         private Rectangle _destinationRectangle;
         public Vector2 Position
         {
@@ -33,18 +34,33 @@ namespace Work_on_17.Classes
         {
             get { return _height; }
         }
+        public bool IsAlive
+        {
+            set { _isAlive = value; }
+            get { return _isAlive; }
+        }
+        public Rectangle Collision
+        {
+            get { return _destinationRectangle; }
+        }
         public Bullet()
         {
+            _isAlive = true;
             _texture = null;
             _destinationRectangle = new Rectangle(100, 300, _width, _height);
         }
         public void LoadContent(ContentManager content)
         {
-            _texture = content.Load<Texture2D>("asteroid");
+            _texture = content.Load<Texture2D>("bullet");
         }
         public void Update()
         {
+
             _destinationRectangle.Y -= _speed;
+            if(_destinationRectangle.Y<= 0 - _height)
+            {
+                _isAlive = false;
+            }
         }
         public void Draw(SpriteBatch spriteBatch)
         {
