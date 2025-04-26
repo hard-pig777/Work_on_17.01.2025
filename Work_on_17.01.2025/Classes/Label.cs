@@ -19,7 +19,12 @@ namespace Work_on_17.Classes
         private Color _color;
         public Color Color
         {
-            set { Color = value; }
+            set { _color = value; }
+        }
+        public string Text
+        {
+            get => _text;
+            set => _text = value;
         }
         public Vector2 SizeText
         {

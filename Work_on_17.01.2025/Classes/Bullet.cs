@@ -7,10 +7,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Content;
-
+using Work_on_17.Classes;
 namespace Work_on_17.Classes
 {
-    public class Bullet
+    public class Bullet : ISaveable
     {
         private Texture2D _texture;
         private int _width = 20;
@@ -24,6 +24,10 @@ namespace Work_on_17.Classes
             {
                 _destinationRectangle.X = (int)value.X;
                 _destinationRectangle.Y = (int)value.Y;
+            }
+            get
+            {
+                return new Vector2(_destinationRectangle.X, _destinationRectangle.Y);
             }
         }
         public int Width
@@ -65,6 +69,25 @@ namespace Work_on_17.Classes
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_texture, _destinationRectangle, Color.White);
+        }
+
+        public object SaveData()
+        {
+            BulletData data = new BulletData() { Position = this.Position, IsAlive = IsAlive};
+
+            return data;
+        }
+
+        public void LoadData(object data, ContentManager content)
+        {
+            if(!(data is BulletData))
+            {
+                return;
+            }
+
+            BulletData bulletData = (BulletData)data;   
+            Position = bulletData.Position;
+            _isAlive = bulletData.IsAlive;
         }
     }
 }

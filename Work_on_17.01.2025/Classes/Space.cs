@@ -16,11 +16,15 @@ namespace Work_on_17.Classes
         private Vector2 _position1;
         private Vector2 _position2;
         private float _speed;
+        public float Speed
+        {
+            set => _speed = value;
+        }
         public Space()
         {
             _texture = null;
             _position2 = new Vector2(0, 0);
-            _speed = 1;
+            _speed = 3;
         }
         public void LoadContent(ContentManager content)
         {
